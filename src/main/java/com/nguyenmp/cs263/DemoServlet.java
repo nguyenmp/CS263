@@ -1,4 +1,4 @@
-package myapp;
+package com.nguyenmp.cs263;
 
 import java.io.IOException;
 import javax.servlet.http.*;

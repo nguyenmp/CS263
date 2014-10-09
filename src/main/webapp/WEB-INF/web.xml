@@ -3,10 +3,28 @@
  "-//Oracle Corporation//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd">
 
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+    <servlet>
+        <servlet-name>jersey</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <!-- Register resources and providers under com.vogella.jersey.first package. -->
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.nguyenmp.cs263</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jersey</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>demo</servlet-name>
-        <servlet-class>myapp.DemoServlet</servlet-class>
+        <servlet-class>com.nguyenmp.cs263.DemoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>demo</servlet-name>
