@@ -1,0 +1,3 @@
+#! /bin/bash
+
+appcfg.sh -A astral-casing-728 update target/appengine-try-java-1.0
