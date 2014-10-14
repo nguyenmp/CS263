@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Path;
 import java.io.IOException;
+import java.net.URLEncoder;
 
 @Path("/enqueue")
 public class EnqueueServlet extends HttpServlet {
@@ -19,5 +20,8 @@ public class EnqueueServlet extends HttpServlet {
 
         Queue queue = QueueFactory.getDefaultQueue();
         queue.add(withUrl("/worker").param("name", name).param("value", value));
+
+
+        response.sendRedirect("/tqueue.jsp?key_name=" + URLEncoder.encode(name));
     }
 }

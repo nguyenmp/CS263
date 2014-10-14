@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE web-app PUBLIC
- "-//Oracle Corporation//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd">
-
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -49,12 +45,12 @@
 
 
     <servlet>
-        <servlet-name>tasks</servlet-name>
+        <servlet-name>test</servlet-name>
         <servlet-class>com.nguyenmp.cs263.TasksServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>tasks</servlet-name>
-        <url-pattern>/tasks</url-pattern>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
     </servlet-mapping>
 
 
