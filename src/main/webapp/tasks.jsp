@@ -4,7 +4,7 @@
 <html><body>
 <p>Hello, this is a testing servlet.</p>
 <%
-    Query allTasks = new Query("Task");
+    Query allTasks = new Query("TaskData");
     DatastoreService service = DatastoreServiceFactory.getDatastoreService();
     Iterable<Entity> entities = service.prepare(allTasks).asIterable(FetchOptions.Builder.withLimit(10));
 

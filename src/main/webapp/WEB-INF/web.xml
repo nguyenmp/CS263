@@ -46,7 +46,7 @@
 
     <servlet>
         <servlet-name>test</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.TasksServlet</servlet-class>
+        <servlet-class>com.nguyenmp.cs263.ReadData</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
@@ -56,7 +56,7 @@
 
     <servlet>
         <servlet-name>enqueue</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.EnqueueServlet</servlet-class>
+        <servlet-class>com.nguyenmp.cs263.Enqueue</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>enqueue</servlet-name>

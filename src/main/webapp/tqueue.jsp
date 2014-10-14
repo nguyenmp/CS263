@@ -9,7 +9,7 @@
 <% String keyName = request.getParameter("key_name"); %>
 <%
     // TODO: Handle when keyName is null or empty
-    Key key = KeyFactory.createKey("Task", keyName);
+    Key key = KeyFactory.createKey("TaskData", keyName);
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Entity entity = null;
     try {

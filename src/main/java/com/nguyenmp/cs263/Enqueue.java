@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 @Path("/enqueue")
-public class EnqueueServlet extends HttpServlet {
+public class Enqueue extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
         String value = request.getParameter("value");

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Path;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Path("/worker")
 public class WorkerServlet extends HttpServlet {
@@ -16,11 +18,11 @@ public class WorkerServlet extends HttpServlet {
         String name = request.getParameter("name");
         String value = request.getParameter("value");
 
-        Key bobKey = KeyFactory.createKey("Task", name);
-        Entity bob = new Entity(bobKey);
-        bob.setProperty("value", value);
+        Key taskKey = KeyFactory.createKey("TaskData", name);
+        Entity task = new Entity(taskKey);
+        task.setProperty("value", value);
 
         DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
-        dataStore.put(bob);
+        dataStore.put(task);
     }
 }
