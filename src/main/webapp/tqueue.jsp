@@ -9,13 +9,13 @@
 <% String keyName = request.getParameter("key_name"); %>
 <%
     // TODO: Handle when keyName is null or empty
-    Key key = KeyFactory.createKey("Test", keyName);
+    Key key = KeyFactory.createKey("Task", keyName);
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Entity entity = null;
     try {
         entity = db.get(key);
     } catch (EntityNotFoundException e) {
-        e.printStackTrace();
+        // Do nothing.  The resulting entity will be set to null
     }
 
     if (entity != null) {

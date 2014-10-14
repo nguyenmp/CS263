@@ -20,7 +20,9 @@ public class TasksServlet extends HttpServlet {
         DatastoreService service = DatastoreServiceFactory.getDatastoreService();
         Iterable<Entity> entities = service.prepare(allTasks).asIterable(FetchOptions.Builder.withLimit(10));
         for (Entity entity : entities) {
-            writer.write("<p>Key: " + entity.getKind() + "</p>");
+            writer.write("<p>Key: " + entity.getKey().getKind() + "</p>");
+            writer.write("<p>Name: " + entity.getKey().getName() + "</p>");
+            writer.write("<p>Value: " + entity.getProperty("value") + "</p>");
         }
         writer.flush();
     }
