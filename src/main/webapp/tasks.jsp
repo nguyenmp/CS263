@@ -2,6 +2,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html><body>
@@ -19,7 +20,7 @@
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM d HH:mm:ss z YYYY");
         System.out.println(format.format(date));
 %>
-<p><%= entity.getKind() %>("<%= entity.getKey().getName() %>") <%= format.format(date) %> <%= entity.getProperty("value") %></p>
+<p><%= entity.getKind() %>("<%= StringEscapeUtils.escapeHtml(entity.getKey().getName()) %>") <%= format.format(date) %> <%= StringEscapeUtils.escapeHtml((String) entity.getProperty("value")) %></p>
 <%
     }
 %>

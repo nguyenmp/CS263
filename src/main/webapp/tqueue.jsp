@@ -1,4 +1,5 @@
 <%@ page import="com.google.appengine.api.datastore.*" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
@@ -20,9 +21,9 @@
 
     if (entity != null) {
 %>
-<p>The value in keyname <%= keyName %> is <%= entity.getProperty("value") %>!</p>
+<p>The value in keyname <%= StringEscapeUtils.escapeHtml(keyName) %> is <%= StringEscapeUtils.escapeHtml((String) entity.getProperty("value")) %>!</p>
 <% } else { %>
-<p>The value in keyname <%= keyName %> is -2!</p>
+<p>The value in keyname <%= StringEscapeUtils.escapeHtml(keyName) %> is -2!</p>
 <% } %>
 </body>
 </html>
