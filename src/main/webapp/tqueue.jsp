@@ -20,9 +20,9 @@
 
     if (entity != null) {
 %>
-<p>The value in keyname <% System.out.println(keyName); %> is -2!</p>
+<p>The value in keyname <%= keyName %> is <%= entity.getProperty("value") %>!</p>
 <% } else { %>
-<p>The entity with keyname <% System.out.println(keyName); %> does not exist.</p>
+<p>The value in keyname <%= keyName %> is -2!</p>
 <% } %>
 </body>
 </html>

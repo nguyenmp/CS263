@@ -21,6 +21,7 @@ public class WorkerServlet extends HttpServlet {
         Key taskKey = KeyFactory.createKey("TaskData", name);
         Entity task = new Entity(taskKey);
         task.setProperty("value", value);
+        task.setProperty("date", new Date().getTime());
 
         DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
         dataStore.put(task);
