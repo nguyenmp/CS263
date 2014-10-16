@@ -6,12 +6,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TaskData implements Serializable {
-    private static final String TYPE_NAME = "TaskData";
+    public static final long serialVersionUID = 0L;
+
+    public static final String TYPE_NAME = "TaskData";
     private static final String KEY_DATE = "date";
     private static final String KEY_VALUE = "value";
 
     public String name, value;
-    public int date;
+    public long date;
 
     public static TaskData fromDataStore(DatastoreService dataStore, String keyName) {
         if (keyName == null) return null;
@@ -31,7 +33,7 @@ public class TaskData implements Serializable {
         if (entity == null) return null;
 
         TaskData data = new TaskData();
-        data.date = (int) entity.getProperty(KEY_DATE);
+        data.date = (long) entity.getProperty(KEY_DATE);
         data.name = entity.getKey().getName();
         data.value = (String) entity.getProperty(KEY_VALUE);
 
