@@ -10,6 +10,7 @@ public class ReadData extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/tasks.jsp").forward(request, response);
+        // TODO: Clean out this code
 //        response.setStatus(HttpServletResponse.SC_OK);
 //        Writer writer = response.getWriter();
 //        writer.write("<p>Hello, this is a testing servlet.</p>\n");

@@ -1,5 +1,6 @@
 <%@ page import="com.google.appengine.api.datastore.*" %>
 <%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
+<%@ page import="com.nguyenmp.cs263.TaskData" %>
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
@@ -12,16 +13,16 @@
     // TODO: Handle when keyName is null or empty
     Key key = KeyFactory.createKey("TaskData", keyName);
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
-    Entity entity = null;
+    TaskData data = null;
     try {
-        entity = db.get(key);
+        data = TaskData.fromEntity(db.get(key));
     } catch (EntityNotFoundException e) {
         // Do nothing.  The resulting entity will be set to null
     }
 
-    if (entity != null) {
+    if (data != null) {
 %>
-<p>The value in keyname <%= StringEscapeUtils.escapeHtml(keyName) %> is <%= StringEscapeUtils.escapeHtml((String) entity.getProperty("value")) %>!</p>
+<p>The value in keyname <%= StringEscapeUtils.escapeHtml(keyName) %> is <%= StringEscapeUtils.escapeHtml(data.value) %>!</p>
 <% } else { %>
 <p>The value in keyname <%= StringEscapeUtils.escapeHtml(keyName) %> is -2!</p>
 <% } %>
