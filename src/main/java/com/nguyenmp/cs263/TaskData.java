@@ -1,19 +1,31 @@
 package com.nguyenmp.cs263;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TaskData {
+public class TaskData implements Serializable {
     private static final String TYPE_NAME = "TaskData";
     private static final String KEY_DATE = "date";
     private static final String KEY_VALUE = "value";
 
     public String name, value;
     public int date;
+
+    public static TaskData fromDataStore(DatastoreService dataStore, String keyName) {
+        if (keyName == null) return null;
+
+        Key key = KeyFactory.createKey(TYPE_NAME, keyName);
+        TaskData data = null;
+        try {
+            data = TaskData.fromEntity(dataStore.get(key));
+        } catch (EntityNotFoundException e) {
+            // Do nothing.  The resulting entity will be set to null
+        }
+
+        return data;
+    }
 
     public static TaskData fromEntity(Entity entity) {
         if (entity == null) return null;
