@@ -93,16 +93,24 @@
         <url-pattern>/users/*</url-pattern>
     </servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
 
     <servlet>
-        <servlet-name>usage</servlet-name>
-        <servlet-class>com.nguyenmp.cs263_real.servlet.UsageServlet</servlet-class>
+        <servlet-name>guestbook</servlet-name>
+        <servlet-class>com.nguyenmp.cs263.GuestbookServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>usage</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>guestbook</servlet-name>
+        <url-pattern>/guestbook</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>sign</servlet-name>
+        <servlet-class>com.nguyenmp.cs263.SignGuestbookServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sign</servlet-name>
+        <url-pattern>/sign</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>guestbook.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
