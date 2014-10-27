@@ -83,14 +83,22 @@
         <url-pattern>/users</url-pattern>
     </servlet-mapping>
 
-    <!--  Everything below this point is for the real class  -->
     <servlet>
         <servlet-name>user</servlet-name>
         <servlet-class>com.nguyenmp.cs263_real.servlet.UserServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>user</servlet-name>
-        <url-pattern>/users/*</url-pattern>
+        <url-pattern>/user/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>usage</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.UsageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>usage</servlet-name>
+        <url-pattern>/usage</url-pattern>
     </servlet-mapping>
 
 

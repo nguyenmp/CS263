@@ -73,7 +73,13 @@ public class UsageDao implements Serializable {
      *              {@link UsageModel#id} is ignored and will be replaced by the ID of the new entry.
      * @return the same usage item with the {@link UsageModel#id} set from the put.
      */
-    public static UsageModel put(UsageModel usage) {
+    public static UsageModel put(String username, String hostname, boolean isRemote) {
+        UsageModel usage = new UsageModel();
+        usage.username = username;
+        usage.isRemote = isRemote;
+        usage.hostname = hostname;
+        usage.timestamp = System.currentTimeMillis();
+
         // Allow GAE's data store to automatically generate numeric key for us
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         usage.id = datastoreService.put(toEntity(usage)).getId();
