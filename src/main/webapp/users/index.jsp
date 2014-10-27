@@ -1,9 +1,8 @@
-<%@ page import="com.nguyenmp.cs263_real.model.UserModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
-    UserModel[] users = (UserModel[]) request.getAttribute("users");
+    String[] users = (String[]) request.getAttribute("users");
 %>
 
 <html>
@@ -12,10 +11,10 @@
 </head>
 <body>
 <ul>
-    <% for (UserModel user : users) { %>
+    <% for (String user : users) { %>
         <li>
             <div>
-                <span class="username"><%= user.username %></span>
+                <span class="username"><%= user %></span>
             </div>
         </li>
     <% } %>
