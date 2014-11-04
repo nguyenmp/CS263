@@ -1,0 +1,6 @@
+<datastore-indexes autoGenerate="true">
+    <datastore-index kind="usage" ancestor="false" source="manual">
+        <property name="username" direction="asc"/>
+        <property name="date_time" direction="asc"/>
+    </datastore-index>
+</datastore-indexes>
