@@ -74,7 +74,9 @@ public class UsageDao implements Serializable {
      */
     public static UsageModel[] put(UsageModel[] usages) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Transaction transaction = datastoreService.beginTransaction();
+
+        // Allow the creation of multiple entities in one transaction
+        Transaction transaction = datastoreService.beginTransaction(TransactionOptions.Builder.withXG(true));
 
         for (UsageModel usage : usages) {
             usage.timestamp = System.currentTimeMillis();
