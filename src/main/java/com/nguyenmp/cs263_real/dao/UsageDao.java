@@ -68,6 +68,26 @@ public class UsageDao implements Serializable {
     }
 
     /**
+     * Puts the given array of usages into the database as a single transaction.
+     * @param usages this function mutates this parameter by filling in the timestamp and id field
+     * @return the same usage models with populated timestamps and id fields
+     */
+    public static UsageModel[] put(UsageModel[] usages) {
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Transaction transaction = datastoreService.beginTransaction();
+
+        for (UsageModel usage : usages) {
+            usage.timestamp = System.currentTimeMillis();
+            Key key = datastoreService.put(transaction, toEntity(usage));
+            usage.id = key.getId();
+        }
+
+        transaction.commit();
+
+        return usages;
+    }
+
+    /**
      * Puts this datagram into the database
      * @param usage A pre-initialized usage object that contains the data to put into the server.
      *              {@link UsageModel#id} is ignored and will be replaced by the ID of the new entry.
