@@ -101,6 +101,14 @@
         <url-pattern>/usage</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>background_usage</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.BackgroundUsageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>background_usage</servlet-name>
+        <url-pattern>/background_usage</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>guestbook</servlet-name>

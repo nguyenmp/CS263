@@ -73,28 +73,27 @@ public class UsageDao implements Serializable {
      * @return the same usage models with populated timestamps and id fields
      */
     public static UsageModel[] put(UsageModel[] usages) {
+        if (usages == null) return null;
+
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
 
-        // Allow the creation of multiple entities in one transaction
-        Transaction transaction = datastoreService.beginTransaction(TransactionOptions.Builder.withXG(true));
-
-        for (UsageModel usage : usages) {
-            usage.timestamp = System.currentTimeMillis();
-            Key key = datastoreService.put(transaction, toEntity(usage));
-            usage.id = key.getId();
+        Entity parent = null;
+        if (usages.length > 0) {
+            parent = newParent();
+            datastoreService.put(parent);
         }
 
-        transaction.commit();
+        Transaction transaction = datastoreService.beginTransaction();
+        for (UsageModel usage : usages) {
+            usage.timestamp = System.currentTimeMillis();
+            Key key = datastoreService.put(transaction, toEntity(usage, parent.getKey()));
+            usage.id = key.getId();
+        }
+        transaction.commitAsync();
 
         return usages;
     }
 
-    /**
-     * Puts this datagram into the database
-     * @param usage A pre-initialized usage object that contains the data to put into the server.
-     *              {@link UsageModel#id} is ignored and will be replaced by the ID of the new entry.
-     * @return the same usage item with the {@link UsageModel#id} set from the put.
-     */
     public static UsageModel put(String username, String hostname, boolean isRemote) {
         UsageModel usage = new UsageModel();
         usage.username = username;
@@ -104,7 +103,7 @@ public class UsageDao implements Serializable {
 
         // Allow GAE's data store to automatically generate numeric key for us
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        usage.id = datastoreService.put(toEntity(usage)).getId();
+        usage.id = datastoreService.put(toEntity(usage, null)).getId();
 
         return usage;
     }
@@ -121,12 +120,17 @@ public class UsageDao implements Serializable {
         return model;
     }
 
-    private static Entity toEntity(UsageModel usage) {
-        Entity task = usage.id == null ? new Entity(KIND) : new Entity(KIND, usage.id);
+    private static Entity toEntity(UsageModel usage, Key parent) {
+        Entity task = usage.id == null ? new Entity(KIND, parent) : new Entity(KIND, usage.id, parent);
         task.setProperty(KEY_TIMESTAMP, usage.timestamp);
         task.setProperty(KEY_USER, usage.username);
         task.setProperty(KEY_HOSTNAME, usage.hostname);
         task.setProperty(KEY_IS_REMOTE, usage.isRemote);
         return task;
+    }
+
+    private static final String PARENT_KIND = "usage_group";
+    private static Entity newParent() {
+        return new Entity(PARENT_KIND);
     }
 }

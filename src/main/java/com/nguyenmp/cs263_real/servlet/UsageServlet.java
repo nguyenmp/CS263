@@ -1,5 +1,7 @@
 package com.nguyenmp.cs263_real.servlet;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.gson.Gson;
 import com.nguyenmp.cs263_real.dao.UsageDao;
 import com.nguyenmp.cs263_real.model.UsageModel;
@@ -9,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 public class UsageServlet extends HttpServlet {
 
@@ -23,7 +28,9 @@ public class UsageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // TODO: Rate limit on our end
         String usageJson = req.getParameter("data");
-        UsageModel[] usageParams = new Gson().fromJson(usageJson, UsageModel[].class);
-        UsageDao.put(usageParams);
+
+        // Push to background servlet to decrease front end hours (json deserialization takes forever)
+        Queue queue = QueueFactory.getDefaultQueue();
+        queue.add(withUrl("/background_usage").param("data", usageJson));
     }
 }
