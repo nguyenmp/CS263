@@ -93,6 +93,24 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>computers</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.ComputersServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>computers</servlet-name>
+        <url-pattern>/computers</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>computer</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.ComputerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>computer</servlet-name>
+        <url-pattern>/computer/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>usage</servlet-name>
         <servlet-class>com.nguyenmp.cs263_real.servlet.UsageServlet</servlet-class>
     </servlet>

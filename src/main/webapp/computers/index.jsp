@@ -1,11 +1,10 @@
 <%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 <%@ page import="java.net.URLEncoder" %>
-<%@ page import="com.nguyenmp.cs263_real.model.UsageModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
-    UsageModel[] usages = (UsageModel[]) request.getAttribute("byUser");
+    String[] computers = (String[]) request.getAttribute("computers");
 %>
 
 <html>
@@ -14,11 +13,11 @@
 </head>
 <body>
 <ul>
-    <% for (UsageModel usage : usages) { %>
+    <% for (String computer : computers) { %>
         <li>
             <div>
-                <a href="${pageContext.request.contextPath}/computer?hostname=<%= URLEncoder.encode(usage.hostname) %>" class="hostname">
-                    <%= StringEscapeUtils.escapeHtml(usage.hostname) %>
+                <a href="${pageContext.request.contextPath}/computer?hostname=<%= URLEncoder.encode(computer) %>" class="hostname">
+                    <%= StringEscapeUtils.escapeHtml(computer) %>
                 </a>
             </div>
         </li>

@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
-    UsageModel[] usages = (UsageModel[]) request.getAttribute("byUser");
+    UsageModel[] usages = (UsageModel[]) request.getAttribute("usages");
 %>
 
 <html>
@@ -17,8 +17,8 @@
     <% for (UsageModel usage : usages) { %>
         <li>
             <div>
-                <a href="${pageContext.request.contextPath}/computer?hostname=<%= URLEncoder.encode(usage.hostname) %>" class="hostname">
-                    <%= StringEscapeUtils.escapeHtml(usage.hostname) %>
+                <a href="${pageContext.request.contextPath}/user?name=<%= URLEncoder.encode(usage.username) %>" class="username">
+                    <%= StringEscapeUtils.escapeHtml(usage.username) %>
                 </a>
             </div>
         </li>

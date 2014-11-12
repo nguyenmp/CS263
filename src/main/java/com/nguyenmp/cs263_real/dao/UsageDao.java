@@ -31,6 +31,22 @@ public class UsageDao implements Serializable {
         return users.toArray(new String[users.size()]);
     }
 
+    public static String[] getComputers() {
+        Query query = new Query(KIND)
+                .addProjection(new PropertyProjection(KEY_HOSTNAME, String.class))
+                .setDistinct(true);
+
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Iterator<Entity> entityIterator = datastoreService.prepare(query).asIterator();
+        List<String> computers = new ArrayList<>();
+        while (entityIterator.hasNext()) {
+            Entity entity = entityIterator.next();
+            computers.add((String) entity.getProperty(KEY_HOSTNAME));
+        }
+
+        return computers.toArray(new String[computers.size()]);
+    }
+
     public static UsageModel[] getByUser(String username) {
         Query query = new Query(KIND)
                 .addSort(KEY_TIMESTAMP)
@@ -48,7 +64,19 @@ public class UsageDao implements Serializable {
     }
 
     public static UsageModel[] getByComputer(String hostname) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("Method not implemented yet.");
+        Query query = new Query(KIND)
+                .addSort(KEY_TIMESTAMP)
+                .setFilter(new Query.FilterPredicate(KEY_HOSTNAME, Query.FilterOperator.EQUAL, hostname));
+
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Iterator<Entity> entityIterator = datastoreService.prepare(query).asIterator();
+
+        List<UsageModel> usage = new ArrayList<>();
+        while (entityIterator.hasNext()) {
+            usage.add(fromEntity(entityIterator.next()));
+        }
+
+        return usage.toArray(new UsageModel[usage.size()]);
     }
 
     /**
