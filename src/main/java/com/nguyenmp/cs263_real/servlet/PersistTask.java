@@ -1,5 +1,7 @@
 package com.nguyenmp.cs263_real.servlet;
 
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.nguyenmp.cs263_real.dao.UsageDao;
@@ -16,6 +18,8 @@ public class PersistTask extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Populate backend queue for each computer
+        UsageDao.prune();
+
         String[] computers = UsageDao.getComputers();
 
         for (String computer : computers) {

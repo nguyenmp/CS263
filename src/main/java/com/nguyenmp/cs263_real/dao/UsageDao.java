@@ -4,9 +4,7 @@ import com.google.appengine.api.datastore.*;
 import com.nguyenmp.cs263_real.model.UsageModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class UsageDao implements Serializable {
     private static final String KIND = "usage";
@@ -14,6 +12,31 @@ public class UsageDao implements Serializable {
     private static final String KEY_USER = "username";
     private static final String KEY_HOSTNAME = "hostname";
     private static final String KEY_IS_REMOTE = "is_remote";
+
+    public static void prune() {
+        return;
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(new Date());
+//        cal.add(Calendar.WEEK_OF_YEAR, -1);
+//        long expiration = cal.getTime().getTime();
+//        Query query = new Query(KIND)
+//                .setFilter(new Query.FilterPredicate(KEY_TIMESTAMP, Query.FilterOperator.LESS_THAN, expiration));
+//        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+//        ArrayList<Key> keys = new ArrayList<>();
+//
+//        int lastCount = -1;
+//        while (lastCount != 0) {
+//            Iterable<Entity> entities = datastoreService.prepare(query).asIterable(FetchOptions.Builder.withDefaults().limit(500));
+//
+//            for (Entity entity : entities) {
+//                keys.add(entity.getKey());
+//            }
+//
+//            lastCount = keys.size();
+//            datastoreService.delete(keys.toArray(new Key[lastCount]));
+//            keys.clear();
+//        }
+    }
 
     public static String[] getUsers() {
         Query query = new Query(KIND)
