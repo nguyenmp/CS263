@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+    <cron>
+        <url>/persist_task</url>
+        <description>Persist the datastore to the blobstore every day</description>
+        <schedule>every 24 hours</schedule>
+    </cron>
+</cronentries>

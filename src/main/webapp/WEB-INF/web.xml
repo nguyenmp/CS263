@@ -152,6 +152,22 @@
         <servlet-name>example</servlet-name>
         <url-pattern>/example</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>persist_task</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.PersistTask</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>persist_task</servlet-name>
+        <url-pattern>/persist_task</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>datastore_to_blobstore</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.DatastoreToBlobstoreConverter</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>datastore_to_blobstore</servlet-name>
+        <url-pattern>/datastore_to_blobstore</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>guestbook.jsp</welcome-file>
     </welcome-file-list>
