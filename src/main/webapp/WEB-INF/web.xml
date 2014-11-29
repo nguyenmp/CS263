@@ -144,6 +144,14 @@
         <servlet-name>sign</servlet-name>
         <url-pattern>/sign</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>example</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.ExampleSelfBlobstore</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>example</servlet-name>
+        <url-pattern>/example</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>guestbook.jsp</welcome-file>
     </welcome-file-list>
