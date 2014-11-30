@@ -102,6 +102,52 @@ public class UsageDao implements Serializable {
         return usage.toArray(new UsageModel[usage.size()]);
     }
 
+    public static UsageModel[] getByComputerInWeek(String hostname, int weeksAgo) {
+        long[] interval = getTimeInterval(weeksAgo);
+        return getByComputerInRange(hostname, interval[0], interval[1]);
+    }
+
+    public static long[] getTimeInterval(int weeksAgo) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.WEEK_OF_YEAR, -weeksAgo);
+
+        // "calculate" the start date of the week
+        Calendar first = (Calendar) calendar.clone();
+        first.add(Calendar.DAY_OF_WEEK,
+                first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
+
+        // and add six days to the end date
+        Calendar last = (Calendar) first.clone();
+        last.add(Calendar.DAY_OF_YEAR, 6);
+
+        return new long[] {first.getTimeInMillis(), last.getTimeInMillis()};
+    }
+
+    public static UsageModel[] getByComputerInRange(String hostname, long start, long end) throws UnsupportedOperationException {
+        Query.FilterPredicate filter1 = new Query.FilterPredicate(KEY_HOSTNAME, Query.FilterOperator.EQUAL, hostname);
+        Query.FilterPredicate filter2 = new Query.FilterPredicate(KEY_TIMESTAMP, Query.FilterOperator.LESS_THAN_OR_EQUAL, end);
+        Query.FilterPredicate filter3 = new Query.FilterPredicate(KEY_TIMESTAMP, Query.FilterOperator.GREATER_THAN_OR_EQUAL, start);
+        Set<Query.Filter> filters = new HashSet<>();
+        filters.add(filter1);
+        filters.add(filter2);
+        filters.add(filter3);
+
+        Query query = new Query(KIND)
+                .addSort(KEY_TIMESTAMP)
+                .setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, filters));
+
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Iterator<Entity> entityIterator = datastoreService.prepare(query).asIterator();
+
+        List<UsageModel> usage = new ArrayList<>();
+        while (entityIterator.hasNext()) {
+            usage.add(fromEntity(entityIterator.next()));
+        }
+
+        return usage.toArray(new UsageModel[usage.size()]);
+    }
+
     /**
      * @param id the ID of the Usage to get
      * @return if the ID is found in our database, then this function returns null.

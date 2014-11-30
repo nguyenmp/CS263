@@ -33,13 +33,15 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
         String computer = req.getParameter("computer");
 
         // Convert our usages into an interval set
-        UsageModel[] usages = UsageDao.getByComputer(computer);
+        UsageModel[] usages = UsageDao.getByComputerInWeek(computer, 1);
+        long[] interval = UsageDao.getTimeInterval(1);
         Map<String, LinkedList<Interval>> intervals = convertToIntervals(usages);
         String json = new Gson().toJson(intervals);
 
         // Persist that interval set into the blobstore
         GcsService gcsService = GcsServiceFactory.createGcsService();
-        String objectName = String.format("%s/%s", computer, new SimpleDateFormat().format(new Date()));
+
+        String objectName = String.format("%s/%s", computer, new SimpleDateFormat("yyyy/MM/dd").format(new Date(interval[0])));
         String bucketName = "mark_nguyen_foo";
         GcsFilename filename = new GcsFilename(bucketName, objectName);
         GcsOutputChannel outputChannel = gcsService.createOrReplace(filename, GcsFileOptions.getDefaultInstance());
