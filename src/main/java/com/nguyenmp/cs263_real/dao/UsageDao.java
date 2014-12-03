@@ -13,29 +13,8 @@ public class UsageDao implements Serializable {
     private static final String KEY_HOSTNAME = "hostname";
     private static final String KEY_IS_REMOTE = "is_remote";
 
-    public static void prune() {
-        return;
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(new Date());
-//        cal.add(Calendar.WEEK_OF_YEAR, -1);
-//        long expiration = cal.getTime().getTime();
-//        Query query = new Query(KIND)
-//                .setFilter(new Query.FilterPredicate(KEY_TIMESTAMP, Query.FilterOperator.LESS_THAN, expiration));
-//        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-//        ArrayList<Key> keys = new ArrayList<>();
-//
-//        int lastCount = -1;
-//        while (lastCount != 0) {
-//            Iterable<Entity> entities = datastoreService.prepare(query).asIterable(FetchOptions.Builder.withDefaults().limit(500));
-//
-//            for (Entity entity : entities) {
-//                keys.add(entity.getKey());
-//            }
-//
-//            lastCount = keys.size();
-//            datastoreService.delete(keys.toArray(new Key[lastCount]));
-//            keys.clear();
-//        }
+    public static boolean prune() {
+        return false;
     }
 
     public static String[] getUsers() {
@@ -218,19 +197,11 @@ public class UsageDao implements Serializable {
 
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
 
-        Entity parent = null;
-        if (usages.length > 0) {
-            parent = newParent();
-            datastoreService.put(parent);
-        }
-
-        Transaction transaction = datastoreService.beginTransaction();
         for (UsageModel usage : usages) {
             usage.timestamp = System.currentTimeMillis();
-            Key key = datastoreService.put(transaction, toEntity(usage, parent.getKey()));
+            Key key = datastoreService.put(toEntity(usage));
             usage.id = key.getId();
         }
-        transaction.commitAsync();
 
         return usages;
     }
@@ -244,7 +215,7 @@ public class UsageDao implements Serializable {
 
         // Allow GAE's data store to automatically generate numeric key for us
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        usage.id = datastoreService.put(toEntity(usage, null)).getId();
+        usage.id = datastoreService.put(toEntity(usage)).getId();
 
         return usage;
     }
@@ -261,8 +232,8 @@ public class UsageDao implements Serializable {
         return model;
     }
 
-    private static Entity toEntity(UsageModel usage, Key parent) {
-        Entity task = usage.id == null ? new Entity(KIND, parent) : new Entity(KIND, usage.id, parent);
+    private static Entity toEntity(UsageModel usage) {
+        Entity task = usage.id == null ? new Entity(KIND) : new Entity(KIND, usage.id);
         task.setProperty(KEY_TIMESTAMP, usage.timestamp);
         task.setProperty(KEY_USER, usage.username);
         task.setProperty(KEY_HOSTNAME, usage.hostname);
@@ -271,6 +242,7 @@ public class UsageDao implements Serializable {
     }
 
     private static final String PARENT_KIND = "usage_group";
+    @Deprecated
     private static Entity newParent() {
         return new Entity(PARENT_KIND);
     }

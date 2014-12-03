@@ -58,10 +58,12 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
             outputStream.close();
         }
 
-        Queue queue = QueueFactory.getDefaultQueue();
-        queue.add(withUrl("/delete_datastore_date_computer")
-                .param("computer", computer)
-                .param("date", Long.toString(date_in_day)));
+        if (usages.length > 0) {
+            Queue queue = QueueFactory.getDefaultQueue();
+            queue.add(withUrl("/delete_datastore_date_computer")
+                    .param("computer", computer)
+                    .param("date", Long.toString(date_in_day)));
+        }
 
         resp.getWriter().println(objectName);
     }

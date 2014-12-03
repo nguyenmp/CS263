@@ -18,13 +18,10 @@ import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 public class PersistTask extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Populate backend queue for each computer
-        UsageDao.prune();
-
         String[] computers = UsageDao.getComputers();
+        Queue queue = QueueFactory.getDefaultQueue();
 
         for (String computer : computers) {
-            Queue queue = QueueFactory.getDefaultQueue();
 
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
             calendar.setTime(new Date(1415456188127l));
