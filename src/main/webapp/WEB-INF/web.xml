@@ -176,6 +176,22 @@
         <servlet-name>delete_datastore_date_computer</servlet-name>
         <url-pattern>/delete_datastore_date_computer</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>blobstore_server</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.BlobstoreServer</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>blobstore_server</servlet-name>
+        <url-pattern>/blobstore_server</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>timeline</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.Timeline</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>timeline</servlet-name>
+        <url-pattern>/timeline</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>guestbook.jsp</welcome-file>
     </welcome-file-list>

@@ -1,5 +1,8 @@
 package com.nguyenmp.cs263_real.servlet;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.tools.cloudstorage.*;
@@ -97,5 +100,17 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
 
     public static class Interval {
         public long start, end;
+    }
+
+    public static GcsFilename getFilename(String computer, long date) {
+        String objectName = String.format("%s/%s", computer, new SimpleDateFormat("yyyy/MM/dd").format(new Date(date)));
+        String bucketName = "mark_nguyen_foo";
+        return new GcsFilename(bucketName, objectName);
+    }
+
+    public static BlobKey getBlobkey(String computer, long date) {
+        GcsFilename filename = getFilename(computer, date);
+        BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+        return blobstoreService.createGsBlobKey(String.format("/gs/%s/%s", filename.getBucketName(), filename.getObjectName()));
     }
 }
