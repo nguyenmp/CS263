@@ -21,25 +21,12 @@ public class PersistTask extends HttpServlet {
         String[] computers = UsageDao.getComputers();
         Queue queue = QueueFactory.getDefaultQueue();
 
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
         for (String computer : computers) {
-
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-            calendar.setTime(new Date(1415456188127l));
-
-            Calendar startOfThisDay = (Calendar) calendar.clone();
-            startOfThisDay.setTime(new Date());
-            startOfThisDay.set(Calendar.HOUR_OF_DAY, 0);
-            startOfThisDay.set(Calendar.MINUTE, 0);
-            startOfThisDay.set(Calendar.SECOND, 0);
-            startOfThisDay.set(Calendar.MILLISECOND, 0);
-
-            while (calendar.before(startOfThisDay)) {
-                queue.add(withUrl("/datastore_to_blobstore")
-                        .param("computer", computer)
-                        .param("date", Long.toString(calendar.getTimeInMillis())));
-
-                calendar.add(Calendar.DAY_OF_YEAR, 1);
-            }
+            queue.add(withUrl("/datastore_to_blobstore")
+                    .param("computer", computer)
+                    .param("date", Long.toString(calendar.getTimeInMillis())));
         }
     }
 }
