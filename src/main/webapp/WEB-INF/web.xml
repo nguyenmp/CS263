@@ -168,6 +168,14 @@
         <servlet-name>datastore_to_blobstore</servlet-name>
         <url-pattern>/datastore_to_blobstore</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>delete_datastore_date_computer</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.DatastorePruner</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delete_datastore_date_computer</servlet-name>
+        <url-pattern>/delete_datastore_date_computer</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>guestbook.jsp</welcome-file>
     </welcome-file-list>

@@ -1,5 +1,7 @@
 package com.nguyenmp.cs263_real.servlet;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.tools.cloudstorage.*;
 import com.google.gson.Gson;
 import com.nguyenmp.cs263_real.dao.UsageDao;
@@ -17,6 +19,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 /**
  * This class converts the "check-in" style data to an interval set.
@@ -54,7 +58,10 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
             outputStream.close();
         }
 
-        UsageDao.delete(usages);
+        Queue queue = QueueFactory.getDefaultQueue();
+        queue.add(withUrl("/delete_datastore_date_computer")
+                .param("computer", computer)
+                .param("date", Long.toString(date_in_day)));
 
         resp.getWriter().println(objectName);
     }

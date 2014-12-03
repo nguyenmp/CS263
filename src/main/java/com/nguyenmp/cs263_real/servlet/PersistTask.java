@@ -24,8 +24,6 @@ public class PersistTask extends HttpServlet {
         String[] computers = UsageDao.getComputers();
 
         for (String computer : computers) {
-            if (!"csil.cs.ucsb.edu".equals(computer)) continue;
-
             Queue queue = QueueFactory.getDefaultQueue();
 
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
