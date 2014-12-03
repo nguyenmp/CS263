@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
@@ -21,8 +24,27 @@ public class PersistTask extends HttpServlet {
         String[] computers = UsageDao.getComputers();
 
         for (String computer : computers) {
+            if (!"csil.cs.ucsb.edu".equals(computer)) continue;
+
             Queue queue = QueueFactory.getDefaultQueue();
-            queue.add(withUrl("/datastore_to_blobstore").param("computer", computer));
+
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+            calendar.setTime(new Date(1415456188127l));
+
+            Calendar startOfThisDay = (Calendar) calendar.clone();
+            startOfThisDay.setTime(new Date());
+            startOfThisDay.set(Calendar.HOUR_OF_DAY, 0);
+            startOfThisDay.set(Calendar.MINUTE, 0);
+            startOfThisDay.set(Calendar.SECOND, 0);
+            startOfThisDay.set(Calendar.MILLISECOND, 0);
+
+            while (calendar.before(startOfThisDay)) {
+                queue.add(withUrl("/datastore_to_blobstore")
+                        .param("computer", computer)
+                        .param("date", Long.toString(calendar.getTimeInMillis())));
+
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
         }
     }
 }

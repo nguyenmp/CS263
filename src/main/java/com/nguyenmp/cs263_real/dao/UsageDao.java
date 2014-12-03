@@ -102,15 +102,31 @@ public class UsageDao implements Serializable {
         return usage.toArray(new UsageModel[usage.size()]);
     }
 
+    @Deprecated
     public static UsageModel[] getByComputerInWeek(String hostname, int weeksAgo) {
-        long[] interval = getTimeInterval(weeksAgo);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.add(Calendar.WEEK_OF_YEAR, -weeksAgo);
+
+        return getByComputerInWeek(hostname, calendar.getTimeInMillis());
+    }
+
+    public static UsageModel[] getByComputerInDay(String hostname, long date) {
+        long[] timeIntervalDay = getTimeIntervalDay(date);
+        return getByComputerInRange(hostname, timeIntervalDay[0], timeIntervalDay[1]);
+    }
+
+    public static UsageModel[] getByComputerInWeek(String hostname, long date_in_week) {
+        long[] interval = getTimeIntervalWeek(date_in_week);
         return getByComputerInRange(hostname, interval[0], interval[1]);
     }
 
-    public static long[] getTimeInterval(int weeksAgo) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.WEEK_OF_YEAR, -weeksAgo);
+    public static long[] getTimeIntervalWeek(long time) {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.setTime(new Date(time));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
         // "calculate" the start date of the week
         Calendar first = (Calendar) calendar.clone();
@@ -119,7 +135,27 @@ public class UsageDao implements Serializable {
 
         // and add six days to the end date
         Calendar last = (Calendar) first.clone();
-        last.add(Calendar.DAY_OF_YEAR, 6);
+        last.add(Calendar.DAY_OF_YEAR, 7);
+        last.add(Calendar.MILLISECOND, -1);
+
+        return new long[] {first.getTimeInMillis(), last.getTimeInMillis()};
+    }
+
+    public static long[] getTimeIntervalDay(long time) {
+        // "calculate" the start date of the day
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.setTime(new Date(time));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Calendar first = (Calendar) calendar.clone();
+
+        // and add 1 days to the end date
+        Calendar last = (Calendar) first.clone();
+        last.add(Calendar.DAY_OF_YEAR, 1);
+        last.add(Calendar.MILLISECOND, -1);
 
         return new long[] {first.getTimeInMillis(), last.getTimeInMillis()};
     }
@@ -161,6 +197,14 @@ public class UsageDao implements Serializable {
             return fromEntity(entity);
         } catch (EntityNotFoundException e) {
             return null;
+        }
+    }
+
+    public static void delete(UsageModel[] usages) {
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        for (UsageModel usage : usages) {
+            Key key = KeyFactory.createKey(KIND, usage.id);
+            datastoreService.delete(key);
         }
     }
 
