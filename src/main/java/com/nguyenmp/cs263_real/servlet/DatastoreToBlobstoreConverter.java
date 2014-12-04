@@ -43,7 +43,7 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
         // Convert our usages into an interval set
         UsageModel[] usages = UsageDao.getByComputerInDay(computer, date_in_day);
         long[] interval = UsageDao.getTimeIntervalDay(date_in_day);
-        Map<String, LinkedList<Interval>> intervals = convertToIntervals(usages);
+        Map<String, LinkedList<Interval>> intervals = convertToIntervalsByUser(usages);
         String json = new Gson().toJson(intervals);
 
         // Persist that interval set into the blobstore
@@ -71,7 +71,7 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
         resp.getWriter().println(objectName);
     }
 
-    private static Map<String, LinkedList<Interval>> convertToIntervals(UsageModel[] usages) {
+    public static Map<String, LinkedList<Interval>> convertToIntervalsByUser(UsageModel[] usages) {
 
         HashMap<String, LinkedList<Interval>> users = new HashMap<>();
         for (UsageModel usage : usages) {
@@ -79,6 +79,32 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
             if (intervals == null) {
                 intervals = new LinkedList<>();
                 users.put(usage.username, intervals);
+            }
+
+            Interval tail = intervals.size() == 0 ? null : intervals.getLast();
+            if (tail == null || tail.end + TIMEOUT < usage.timestamp) {
+                // Either the last interval didn't exist or it timed out.
+                // So now we start a new interval
+                tail = new Interval();
+                tail.start = usage.timestamp;
+                tail.end = usage.timestamp;
+                intervals.add(tail);
+            } else {
+                // Extend the old interval
+                tail.end = usage.timestamp;
+            }
+        }
+
+        return users;
+    }
+    public static Map<String, LinkedList<Interval>> convertToIntervalsByComputer(UsageModel[] usages) {
+
+        HashMap<String, LinkedList<Interval>> users = new HashMap<>();
+        for (UsageModel usage : usages) {
+            LinkedList<Interval> intervals = users.get(usage.hostname);
+            if (intervals == null) {
+                intervals = new LinkedList<>();
+                users.put(usage.hostname, intervals);
             }
 
             Interval tail = intervals.size() == 0 ? null : intervals.getLast();

@@ -1,6 +1,8 @@
 package com.nguyenmp.cs263_real.dao;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.nguyenmp.cs263_real.model.UsageModel;
 
 import java.io.Serializable;
@@ -49,7 +51,7 @@ public class UsageDao implements Serializable {
         return computers.toArray(new String[computers.size()]);
     }
 
-    public static UsageModel[] getByUser(String username) {
+    private static UsageModel[] getByUser(String username) {
         Query query = new Query(KIND)
                 .addSort(KEY_TIMESTAMP)
                 .setFilter(new Query.FilterPredicate(KEY_USER, Query.FilterOperator.EQUAL, username));
@@ -63,6 +65,16 @@ public class UsageDao implements Serializable {
         }
 
         return usage.toArray(new UsageModel[usage.size()]);
+    }
+
+    public static UsageModel[] getByUserCached(String username) {
+        MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+        UsageModel[] usages = (UsageModel[]) memcacheService.get(username);
+        if (usages == null) {
+            usages = getByUser(username);
+        }
+
+        return usages;
     }
 
     public static UsageModel[] getByComputer(String hostname) throws UnsupportedOperationException {
