@@ -1,12 +1,16 @@
 package com.nguyenmp.cs263_real.dao;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.nguyenmp.cs263_real.model.UsageModel;
+import com.nguyenmp.cs263_real.servlet.DatastoreToBlobstoreConverter;
 
 import java.io.Serializable;
 import java.util.*;
+
+import static com.nguyenmp.cs263_real.servlet.DatastoreToBlobstoreConverter.Interval;
 
 public class UsageDao implements Serializable {
     private static final String KIND = "usage";
@@ -69,15 +73,17 @@ public class UsageDao implements Serializable {
 
     public static UsageModel[] getByUserCached(String username) {
         MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
-        UsageModel[] usages = (UsageModel[]) memcacheService.get(username);
+        String key = "user_" + username;
+        UsageModel[] usages = (UsageModel[]) memcacheService.get(key);
         if (usages == null) {
             usages = getByUser(username);
+            memcacheService.put(key, usages, Expiration.byDeltaSeconds(60*15)); // 15 minutes
         }
 
         return usages;
     }
 
-    public static UsageModel[] getByComputer(String hostname) throws UnsupportedOperationException {
+    private static UsageModel[] getByComputer(String hostname) throws UnsupportedOperationException {
         Query query = new Query(KIND)
                 .addSort(KEY_TIMESTAMP)
                 .setFilter(new Query.FilterPredicate(KEY_HOSTNAME, Query.FilterOperator.EQUAL, hostname));
@@ -91,6 +97,19 @@ public class UsageDao implements Serializable {
         }
 
         return usage.toArray(new UsageModel[usage.size()]);
+    }
+
+    public static Map<String, LinkedList<Interval>> getByComputerCached(String hostname) throws UnsupportedOperationException {
+        MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+        String key = "computer_" + hostname;
+        Map<String, LinkedList<Interval>> map = (Map<String, LinkedList<Interval>>) memcacheService.get(key);
+        if (map == null) {
+            UsageModel[] data = getByComputer(hostname);
+            map = DatastoreToBlobstoreConverter.convertToIntervalsByUser(data);
+            memcacheService.put(key, map, Expiration.byDeltaSeconds(60*15)); // 15 minutes
+        }
+
+        return map;
     }
 
     @Deprecated

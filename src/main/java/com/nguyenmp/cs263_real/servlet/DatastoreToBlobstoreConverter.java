@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.channels.Channels;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -124,7 +125,7 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
         return users;
     }
 
-    public static class Interval {
+    public static class Interval implements Serializable {
         public long start, end;
     }
 
