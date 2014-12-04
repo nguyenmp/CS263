@@ -54,7 +54,11 @@
             start.setUTCMilliseconds(interval.start);
             var end = new Date(0);
             end.setUTCMilliseconds(interval.end);
-            dataArr.push({id: id++, content: key, start: start, end: end})
+            if (interval.start === interval.end) {
+                dataArr.push({id: id++, content: key, start: start});
+            } else {
+                dataArr.push({id: id++, content: key, start: start, end: end});
+            }
         }
     }
 
