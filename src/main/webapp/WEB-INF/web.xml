@@ -192,6 +192,22 @@
         <servlet-name>timeline</servlet-name>
         <url-pattern>/timeline</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>porter</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.Porter</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>porter</servlet-name>
+        <url-pattern>/porter</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>update_cache</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.UpdateCache</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>update_cache</servlet-name>
+        <url-pattern>/update_cache</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>guestbook.jsp</welcome-file>
     </welcome-file-list>

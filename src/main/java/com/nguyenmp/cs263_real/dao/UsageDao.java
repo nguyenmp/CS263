@@ -99,7 +99,7 @@ public class UsageDao implements Serializable {
         return usage.toArray(new UsageModel[usage.size()]);
     }
 
-    public static Map<String, LinkedList<Interval>> getByComputerCached(String hostname) throws UnsupportedOperationException {
+    public static Map<String, LinkedList<Interval>> getByComputerCached(String hostname) {
         MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
         String key = "computer_" + hostname;
         Map<String, LinkedList<Interval>> map = (Map<String, LinkedList<Interval>>) memcacheService.get(key);
@@ -109,6 +109,15 @@ public class UsageDao implements Serializable {
             memcacheService.put(key, map, Expiration.byDeltaSeconds(60*15)); // 15 minutes
         }
 
+        return map;
+    }
+
+    public static Map<String, LinkedList<Interval>> cacheComputer(String hostname) {
+        MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+        String key = "computer_" + hostname;
+        UsageModel[] data = getByComputer(hostname);
+        Map<String, LinkedList<Interval>> map = DatastoreToBlobstoreConverter.convertToIntervalsByUser(data);
+        memcacheService.put(key, map, Expiration.byDeltaSeconds(60*15)); // 15 minutes
         return map;
     }
 

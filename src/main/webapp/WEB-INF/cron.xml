@@ -5,4 +5,14 @@
         <description>Persist the datastore to the blobstore every day</description>
         <schedule>every 24 hours</schedule>
     </cron>
+    <cron>
+        <url>/porter</url>
+        <description>Ports the blobstore to the new format</description>
+        <schedule>every monday 09:00</schedule>
+    </cron>
+    <cron>
+        <url>/update_cache</url>
+        <description>Pushes new data into the mem cache</description>
+        <schedule>every 14 minutes</schedule>
+    </cron>
 </cronentries>
