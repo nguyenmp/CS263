@@ -50,7 +50,7 @@
 
     var json = '<%=new Gson().toJson(DatastoreToBlobstoreConverter.convertToIntervalsByComputer(usages))%>';
     var data = JSON.parse(json);
-    loadedDate(json);
+    loadedDate(data);
     function loadedDate(data) {
 
         // Create a DataSet with data (enables two way data binding)
