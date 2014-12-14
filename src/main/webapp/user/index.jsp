@@ -5,6 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
+//    String hostname = (String) request.getAttribute("hostname");
     UsageModel[] usages = (UsageModel[]) request.getAttribute("byUser");
 %>
 
@@ -25,25 +26,32 @@
     var dataArr = [];
     var id = 1;
     var dataset = new vis.DataSet(dataArr);
+    var oldest_time = new Date().valueOf();
 
     // Configuration for the Timeline
     var options = {};
 
     // Create a Timeline
     var timeline = new vis.Timeline(container, dataset, options);
-    timeline.on('rangechange', function(properties) {
-        tmp = properties;
-        console.log(tmp);
-    });
+//    timeline.on('rangechange', function(properties) {
+//        if (oldest_time > properties.start.valueOf()) {
+//            while (oldest_time > properties.start.valueOf()) {
+//                oldest_time -= 24 * 60 * 60 * 1000;
+//
+//                $.getJSON("http://astral-casing-728.appspot.com/blobstore_server?hostname=" + hostname + "&date=" + oldest_time, loadedDate(data));
+//            }
+//            oldest_time = properties.start.valueOf();
+//        }
+//    });
     timeline.on('select', function(properties) {
         var hostname = dataArr[properties.items[0] - 1].content;
         window.open("http://astral-casing-728.appspot.com/computer?hostname=" + hostname, "_blank")
     });
 
     var json = '<%=new Gson().toJson(DatastoreToBlobstoreConverter.convertToIntervalsByComputer(usages))%>';
+    var data = JSON.parse(json);
     loadedDate(json);
-    function loadedDate(json) {
-        var data = JSON.parse(json);
+    function loadedDate(data) {
 
         // Create a DataSet with data (enables two way data binding)
         for (var key in data) {

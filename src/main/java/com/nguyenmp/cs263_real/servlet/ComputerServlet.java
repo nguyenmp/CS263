@@ -19,6 +19,7 @@ public class ComputerServlet extends HttpServlet {
         Map<String, LinkedList<Interval>> map = UsageDao.getByComputerCached(hostname);
 
         // Render all users
+        req.setAttribute("hostname", hostname);
         req.setAttribute("usages", map);
         req.getRequestDispatcher("/computer/index.jsp").forward(req, resp);
     }

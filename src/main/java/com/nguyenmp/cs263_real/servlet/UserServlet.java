@@ -15,6 +15,7 @@ public class UserServlet extends HttpServlet {
         String name = request.getParameter("name");
         UsageModel[] byUser = UsageDao.getByUserCached(name);
         // This will contain which computers the user is currently on and have used in the past
+        request.setAttribute("hostname", name);
         request.setAttribute("byUser", byUser);
         request.getRequestDispatcher("/user/index.jsp").forward(request, response);
     }
