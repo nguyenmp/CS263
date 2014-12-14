@@ -20,46 +20,53 @@
 <div id="mytimeline"></div>
 
 <script type="text/javascript">
-    var json = '<%=new Gson().toJson(DatastoreToBlobstoreConverter.convertToIntervalsByComputer(usages))%>';
-    var data = JSON.parse(json);
-
     // DOM element where the Timeline will be attached
     var container = document.getElementById('mytimeline');
-
-    // Create a DataSet with data (enables two way data binding)
     var dataArr = [];
     var id = 1;
-    for (var key in data) {
-        var intervals = data[key];
-        console.log(intervals);
-        for (var i = 0; i < intervals.length; i++) {
-            var interval = intervals[i];
-            console.log(interval);
-
-            var start = new Date(0);
-            start.setUTCMilliseconds(interval.start);
-            var end = new Date(0);
-            end.setUTCMilliseconds(interval.end);
-            if (interval.start === interval.end) {
-                dataArr.push({id: id++, content: key, start: start});
-            } else {
-                dataArr.push({id: id++, content: key, start: start, end: end});
-            }
-        }
-    }
-
-
-    var data = new vis.DataSet(dataArr);
+    var dataset = new vis.DataSet(dataArr);
 
     // Configuration for the Timeline
     var options = {};
 
     // Create a Timeline
-    var timeline = new vis.Timeline(container, data, options);
+    var timeline = new vis.Timeline(container, dataset, options);
+    timeline.on('rangechange', function(properties) {
+        tmp = properties;
+        console.log(tmp);
+    });
     timeline.on('select', function(properties) {
         var hostname = dataArr[properties.items[0] - 1].content;
         window.open("http://astral-casing-728.appspot.com/computer?hostname=" + hostname, "_blank")
     });
+
+    var json = '<%=new Gson().toJson(DatastoreToBlobstoreConverter.convertToIntervalsByComputer(usages))%>';
+    loadedDate(json);
+    function loadedDate(json) {
+        var data = JSON.parse(json);
+
+        // Create a DataSet with data (enables two way data binding)
+        for (var key in data) {
+            var intervals = data[key];
+            console.log(intervals);
+            for (var i = 0; i < intervals.length; i++) {
+                var interval = intervals[i];
+                console.log(interval);
+
+                var start = new Date(0);
+                start.setUTCMilliseconds(interval.start);
+                var end = new Date(0);
+                end.setUTCMilliseconds(interval.end);
+                if (interval.start === interval.end) {
+                    dataArr.push({id: id++, content: key, start: start});
+                } else {
+                    dataArr.push({id: id++, content: key, start: start, end: end});
+                }
+            }
+        }
+
+        dataset.update(dataArr);
+    }
 </script>
 </body>
 </html>
