@@ -1,9 +1,6 @@
 <%@ page import="com.google.gson.Gson" %>
 <%@ page import="com.nguyenmp.cs263_real.model.UsageModel" %>
 <%@ page import="com.nguyenmp.cs263_real.servlet.DatastoreToBlobstoreConverter" %>
-<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
-<%@ page import="java.net.URLEncoder" %>
-<%@ page import="static com.nguyenmp.cs263_real.servlet.DatastoreToBlobstoreConverter.Interval" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -19,17 +16,6 @@
     <script src="http://visjs.org/dist/vis.js"></script>
 </head>
 <body>
-<ul>
-    <% for (UsageModel usage : usages) { %>
-        <li>
-            <div>
-                <a href="${pageContext.request.contextPath}/computer?hostname=<%= URLEncoder.encode(usage.hostname) %>" class="hostname">
-                    <%= StringEscapeUtils.escapeHtml(usage.hostname) %>
-                </a>
-            </div>
-        </li>
-    <% } %>
-</ul>
 
 <div id="mytimeline"></div>
 
