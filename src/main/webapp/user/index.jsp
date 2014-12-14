@@ -56,6 +56,10 @@
 
     // Create a Timeline
     var timeline = new vis.Timeline(container, data, options);
+    timeline.on('select', function(properties) {
+        var hostname = dataArr[properties.items[0] - 1].content;
+        window.open("http://astral-casing-728.appspot.com/computer?hostname=" + hostname, "_blank")
+    });
 </script>
 </body>
 </html>

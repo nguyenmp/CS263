@@ -57,8 +57,9 @@
 
     // Create a Timeline
     var timeline = new vis.Timeline(container, data, options);
-    timeline.on('select', function (properties) {
-        console.log(properties);
+    timeline.on('select', function(properties) {
+        var name = dataArr[properties.items[0] - 1].content;
+        window.open("http://astral-casing-728.appspot.com/user?name=" + name, "_blank")
     });
 </script>
 </body>
