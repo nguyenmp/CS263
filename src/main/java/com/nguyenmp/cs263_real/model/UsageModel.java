@@ -3,8 +3,11 @@ package com.nguyenmp.cs263_real.model;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
-@XmlRootElement
-public class UsageModel implements Serializable {
+/**
+ * <p>Represents a basic "check-in" for a computer by
+ * a user at a certain time.  Literally just a POJO.</p>
+ */
+@XmlRootElement public class UsageModel implements Serializable {
 
     /** the internal database key for this item */
     public Long id = null;

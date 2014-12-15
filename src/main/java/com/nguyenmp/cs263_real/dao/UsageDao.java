@@ -182,7 +182,7 @@ public class UsageDao {
         return map;
     }
 
-    public static UsageModel[] getByComputerInDay(String hostname, long date) {
+    @Nonnull public static UsageModel[] getByComputerInDay(String hostname, long date) {
         long[] timeIntervalDay = getTimeIntervalDay(date);
         return getByComputerInRange(hostname, timeIntervalDay[0], timeIntervalDay[1]);
     }
@@ -194,7 +194,7 @@ public class UsageDao {
      * @return an array of two longs, the first element being the
      * start of the date and the second element being the end of the date
      */
-    public static long[] getTimeIntervalDay(long time) {
+    @Nonnull public static long[] getTimeIntervalDay(long time) {
         // "calculate" the start date of the day
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         calendar.setTime(new Date(time));
@@ -220,7 +220,7 @@ public class UsageDao {
      * @param end the end time (time since epoch in milliseconds) inclusive
      * @return the set of data entries that satisfy the given constraints
      */
-    public static UsageModel[] getByComputerInRange(String hostname, long start, long end) {
+    @Nonnull public static UsageModel[] getByComputerInRange(String hostname, long start, long end) {
         FilterPredicate filter1 = new FilterPredicate(KEY_HOSTNAME, EQUAL, hostname);
         FilterPredicate filter2 = new FilterPredicate(KEY_TIMESTAMP, LESS_THAN_OR_EQUAL, end);
         FilterPredicate filter3 = new FilterPredicate(KEY_TIMESTAMP, GREATER_THAN_OR_EQUAL, start);

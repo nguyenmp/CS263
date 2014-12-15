@@ -11,7 +11,6 @@ import java.io.IOException;
 
 public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO: Implement getting specific user's usage
         String name = request.getParameter("name");
         if (name == null || name.equals("")) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter \"name\" cannot be null or empty string.");

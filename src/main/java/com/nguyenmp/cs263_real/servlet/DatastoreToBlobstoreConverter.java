@@ -35,43 +35,62 @@ import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
  * prune the datastore to only store 1 day's worth of data.
  */
 public class DatastoreToBlobstoreConverter extends HttpServlet {
+    /** The string encoding to use to convert the json string into a binary byte stream */
     private static final String ENCODING = "UTF-8";
+
+    /** The constant timeout where if a user hasn't checked in
+     *  for this amount of time, the user probably logged out. */
     private static final long TIMEOUT = 11 * 60 * 1000; // 11 minutes in milliseconds
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    /**
+     * Takes in a computer and a date and persists that computer's data and the date to the blobstore as a
+     * json mapping of login intervals by users.  We then delete this information from the datastore.
+     */
+    @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String computer = req.getParameter("computer");
-        long date_in_day = Long.parseLong(req.getParameter("date"));
+        String dateString = req.getParameter("date");
 
-        // Convert our usages into an interval set
-        UsageModel[] usages = UsageDao.getByComputerInDay(computer, date_in_day);
-        long[] interval = UsageDao.getTimeIntervalDay(date_in_day);
-        Map<String, LinkedList<Interval>> intervals = convertToIntervalsByUser(usages);
-        String json = new Gson().toJson(intervals);
+        if (computer == null || computer.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter \"computer\" was not specified");
+        } else if (dateString == null || dateString.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter \"date\" was not specified");
+        } else {
+            try {
+                long date_in_day = Long.parseLong(dateString);
 
-        // Persist that interval set into the blobstore
-        GcsService gcsService = GcsServiceFactory.createGcsService();
-        String objectName = String.format("%s/%s", computer, new SimpleDateFormat("yyyy/MM/dd").format(new Date(interval[0])));
-        String bucketName = "mark_nguyen_foo";
-        GcsFilename filename = new GcsFilename(bucketName, objectName);
+                // Convert our usages into an interval set
+                UsageModel[] usages = UsageDao.getByComputerInDay(computer, date_in_day);
+                long[] interval = UsageDao.getTimeIntervalDay(date_in_day);
+                Map<String, LinkedList<Interval>> intervals = convertToIntervalsByUser(usages);
+                String json = new Gson().toJson(intervals);
 
-        GcsFileMetadata metadata = gcsService.getMetadata(filename);
-        if (metadata == null) {
-            GcsOutputChannel outputChannel = gcsService.createOrReplace(filename, GcsFileOptions.getDefaultInstance());
-            OutputStream outputStream = Channels.newOutputStream(outputChannel);
-            byte[] data = json.getBytes(ENCODING);
-            outputStream.write(data);
-            outputStream.close();
+                // Persist that interval set into the blobstore
+                GcsService gcsService = GcsServiceFactory.createGcsService();
+                String objectName = String.format("%s/%s", computer, new SimpleDateFormat("yyyy/MM/dd").format(new Date(interval[0])));
+                String bucketName = "mark_nguyen_foo";
+                GcsFilename filename = new GcsFilename(bucketName, objectName);
+
+                // If the metadata doesn't exist,
+                GcsFileMetadata metadata = gcsService.getMetadata(filename);
+                if (metadata == null) {
+                    GcsOutputChannel outputChannel = gcsService.createOrReplace(filename, GcsFileOptions.getDefaultInstance());
+                    OutputStream outputStream = Channels.newOutputStream(outputChannel);
+                    byte[] data = json.getBytes(ENCODING);
+                    outputStream.write(data);
+                    outputStream.close();
+                }
+
+                // Prune the database of the data we persisted
+                if (usages.length > 0) {
+                    Queue queue = QueueFactory.getDefaultQueue();
+                    queue.add(withUrl("/delete_datastore_date_computer")
+                            .param("computer", computer)
+                            .param("date", Long.toString(date_in_day)));
+                }
+            } catch (NumberFormatException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter \"date\" was malformed.");
+            }
         }
-
-        if (usages.length > 0) {
-            Queue queue = QueueFactory.getDefaultQueue();
-            queue.add(withUrl("/delete_datastore_date_computer")
-                    .param("computer", computer)
-                    .param("date", Long.toString(date_in_day)));
-        }
-
-        resp.getWriter().println(objectName);
     }
 
     /**
@@ -107,18 +126,33 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
 
         return users;
     }
-    public static Map<String, LinkedList<Interval>> convertToIntervalsByComputer(UsageModel[] usages) {
 
-        HashMap<String, LinkedList<Interval>> users = new HashMap<>();
+    /**
+     * Generates a map of computers to time intervals
+     * @param usages the usage data for a user
+     * @return a mapping of hostnames to time intervals logged by the given user
+     */
+    @Nonnull public static Map<String, LinkedList<Interval>> convertToIntervalsByComputer(@Nonnull UsageModel[] usages) {
+        // Create the resulting mapping
+        HashMap<String, LinkedList<Interval>> mapping = new HashMap<>();
+
+        // For each usage entry, extend the interval for the computer
         for (UsageModel usage : usages) {
-            LinkedList<Interval> intervals = users.get(usage.hostname);
+
+            // If this computer hasn't been added to the mapping yet,
+            // initialize it with an empty list of intervals
+            LinkedList<Interval> intervals = mapping.get(usage.hostname);
             if (intervals == null) {
                 intervals = new LinkedList<>();
-                users.put(usage.hostname, intervals);
+                mapping.put(usage.hostname, intervals);
             }
 
+            // Get the last element of the list (or null if the list is empty)
             Interval tail = intervals.size() == 0 ? null : intervals.getLast();
+
             if (tail == null || tail.end + TIMEOUT < usage.timestamp) {
+                // If there are no intervals yet, or the last interval is too old,
+                // abandon the last interval and create a new one, appending it to the list
                 // Either the last interval didn't exist or it timed out.
                 // So now we start a new interval
                 tail = new Interval();
@@ -126,29 +160,48 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
                 tail.end = usage.timestamp;
                 intervals.add(tail);
             } else {
-                // Extend the old interval
+                // Otherwise, extend the old interval
                 tail.end = usage.timestamp;
             }
         }
 
-        return users;
+        return mapping;
     }
 
+    /** A simple POJO that represents an interval of time */
     public static class Interval implements Serializable {
-        public long start, end;
+
+        /** the inclusive start of this interval (time since epoch in milliseconds) */
+        public long start;
+
+        /** the inclusive end of this interval (time since epoch in milliseconds) */
+        public long end;
     }
 
-    @Nonnull
-    public static GcsFilename getFilename(@Nonnull String computer, long date) {
+    /**
+     * Converts a computer name and a date into a Google Cloud Service filename
+     * for looking up in the blob store (historical data). Can be used to find metadata about the file.
+     * @param computer the computer's data to look up (hostname) e.g., "csil.cs.ucsb.edu"
+     * @param date the time in milliseconds since epoch for the date to look up (any time in the date's interval is fine)
+     * @return the blobkey to the persisted json result for the historical data
+     */
+    @Nonnull public static GcsFilename getFilename(@Nonnull String computer, long date) {
         String objectName = String.format("%s/%s", computer, new SimpleDateFormat("yyyy/MM/dd").format(new Date(date)));
         String bucketName = "mark_nguyen_foo";
         return new GcsFilename(bucketName, objectName);
     }
 
-    @Nonnull
-    public static BlobKey getBlobkey(@Nonnull String computer, long date) {
+    /**
+     * Converts a computer name and a date into a Blobkey for looking up in the blob store (historical data) for serving
+     * @param computer the computer's data to look up (hostname) e.g., "csil.cs.ucsb.edu"
+     * @param date the time in milliseconds since epoch for the date to look up (any time in the date's interval is fine)
+     * @return the blobkey to the persisted json result for the historical data
+     */
+    @Nonnull public static BlobKey getBlobkey(@Nonnull String computer, long date) {
         GcsFilename filename = getFilename(computer, date);
         BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+
+        // The /gs/bucketname/filename is exactly what is stated in the documentation
         return blobstoreService.createGsBlobKey(String.format("/gs/%s/%s", filename.getBucketName(), filename.getObjectName()));
     }
 }
