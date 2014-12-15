@@ -1,4 +1,18 @@
+html {
+    height: 100%;
+}
+
 body {
     font-family: Verdana, Helvetica, sans-serif;
     background-color: #FFFFCC;
+    height: 100%;
+}
+
+iframe {
+    height: 100%;
+}
+
+.two-column {
+    width: 50%;
+    float: left;
 }

@@ -8,13 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Created by mark on 11/11/14.
- */
 public class ComputersServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] computers = UsageDao.getComputers();
+        String[] computers = UsageDao.getComputersCached();
 
         // Render all users
         req.setAttribute("computers", computers);

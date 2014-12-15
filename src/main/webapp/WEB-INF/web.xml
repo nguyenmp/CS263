@@ -24,56 +24,15 @@
     </servlet-mapping>
 
 
-    <servlet>
-        <servlet-name>demo</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.DemoServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>demo</servlet-name>
-        <url-pattern>/demo</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>worker</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.WorkerServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>worker</servlet-name>
-        <url-pattern>/worker</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>test</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.ReadData</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>test</servlet-name>
-        <url-pattern>/test</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>enqueue</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.Enqueue</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>enqueue</servlet-name>
-        <url-pattern>/enqueue</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>upload</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.Upload</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>upload</servlet-name>
-        <url-pattern>/upload</url-pattern>
-    </servlet-mapping>
-
     <!--  Everything below this point is for the real class  -->
+    <servlet>
+        <servlet-name>index</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.Index</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>index</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>users</servlet-name>
         <servlet-class>com.nguyenmp.cs263_real.servlet.UsersServlet</servlet-class>
@@ -126,23 +85,6 @@
     <servlet-mapping>
         <servlet-name>background_usage</servlet-name>
         <url-pattern>/background_usage</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>guestbook</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.GuestbookServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>guestbook</servlet-name>
-        <url-pattern>/guestbook</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>sign</servlet-name>
-        <servlet-class>com.nguyenmp.cs263.SignGuestbookServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>sign</servlet-name>
-        <url-pattern>/sign</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>persist_task</servlet-name>
@@ -200,7 +142,4 @@
         <servlet-name>update_cache</servlet-name>
         <url-pattern>/update_cache</url-pattern>
     </servlet-mapping>
-    <welcome-file-list>
-        <welcome-file>guestbook.jsp</welcome-file>
-    </welcome-file-list>
 </web-app>

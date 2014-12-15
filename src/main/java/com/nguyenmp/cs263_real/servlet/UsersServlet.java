@@ -11,7 +11,7 @@ import java.io.IOException;
 public class UsersServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] users = UsageDao.getUsers();
+        String[] users = UsageDao.getUsersCached();
 
         // Render all users
         req.setAttribute("users", users);

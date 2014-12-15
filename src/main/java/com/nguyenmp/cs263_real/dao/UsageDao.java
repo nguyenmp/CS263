@@ -50,7 +50,7 @@ public class UsageDao {
      * @return an array of all usernames stored in the Datastore (since the last database wipe)
      * e.g., {"mpnguyen", "dcoffill", "cs263"}
      */
-    @Nonnull public static String[] getUsers() {
+    @Nonnull private static String[] getUsers() {
         Query query = new Query(KIND)
                 .addProjection(new PropertyProjection(KEY_USER, String.class))
                 .setDistinct(true);
@@ -64,6 +64,22 @@ public class UsageDao {
         }
 
         return users.toArray(new String[users.size()]);
+    }
+
+    /**
+     * Fetches the users from the mem cache or falls back to the data store on a cache miss
+     * @return an array of user names
+     */
+    @Nonnull public static String[] getUsersCached() {
+        MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+        String key = "users_";
+        String[] users = (String[]) memcacheService.get(key);
+        if (users == null) {
+            users = getUsers();
+            memcacheService.put(key, users, Expiration.byDeltaSeconds(60*15)); // 15 minutes
+        }
+
+        return users;
     }
 
     /**
@@ -84,6 +100,22 @@ public class UsageDao {
         }
 
         return computers.toArray(new String[computers.size()]);
+    }
+
+    /**
+     * Fetches the users from the mem cache or falls back to the data store on a cache miss
+     * @return an array of hostnames
+     */
+    @Nonnull public static String[] getComputersCached() {
+        MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+        String key = "computers_";
+        String[] hostnames = (String[]) memcacheService.get(key);
+        if (hostnames == null) {
+            hostnames = getComputers();
+            memcacheService.put(key, hostnames, Expiration.byDeltaSeconds(60*15)); // 15 minutes
+        }
+
+        return hostnames;
     }
 
     /**
@@ -280,7 +312,7 @@ public class UsageDao {
 
     /**
      * Converts a database entity into a {@link UsageModel}, filling in all the important bits.
-     * @param usage the database compatible representation
+     * @param entity the database compatible representation
      * @return the data point as a simple POJO
      */
     @Nonnull private static UsageModel fromEntity(@Nonnull Entity entity) {
