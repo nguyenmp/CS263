@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 import com.nguyenmp.cs263_real.dao.UsageDao;
 import com.nguyenmp.cs263_real.model.UsageModel;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -72,9 +74,16 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
         resp.getWriter().println(objectName);
     }
 
-    public static Map<String, LinkedList<Interval>> convertToIntervalsByUser(UsageModel[] usages) {
-
+    /**
+     * <p>Converts usage data points into sets of intervals by username.</p>
+     * <p>Note that this doesn't discriminate against remote or local check-ins.</p>
+     * @param usages the array of data points that represent check-ins for users on a computer
+     * @return a compacted mapping of usernames to list of time intervals of when the user is logged-in.
+     */
+    @Nonnull public static Map<String, LinkedList<Interval>> convertToIntervalsByUser(@Nullable UsageModel[] usages) {
         HashMap<String, LinkedList<Interval>> users = new HashMap<>();
+        if (usages == null) return users;
+
         for (UsageModel usage : usages) {
             LinkedList<Interval> intervals = users.get(usage.username);
             if (intervals == null) {
@@ -129,13 +138,15 @@ public class DatastoreToBlobstoreConverter extends HttpServlet {
         public long start, end;
     }
 
-    public static GcsFilename getFilename(String computer, long date) {
+    @Nonnull
+    public static GcsFilename getFilename(@Nonnull String computer, long date) {
         String objectName = String.format("%s/%s", computer, new SimpleDateFormat("yyyy/MM/dd").format(new Date(date)));
         String bucketName = "mark_nguyen_foo";
         return new GcsFilename(bucketName, objectName);
     }
 
-    public static BlobKey getBlobkey(String computer, long date) {
+    @Nonnull
+    public static BlobKey getBlobkey(@Nonnull String computer, long date) {
         GcsFilename filename = getFilename(computer, date);
         BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
         return blobstoreService.createGsBlobKey(String.format("/gs/%s/%s", filename.getBucketName(), filename.getObjectName()));
