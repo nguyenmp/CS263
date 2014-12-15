@@ -145,14 +145,6 @@
         <url-pattern>/sign</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>example</servlet-name>
-        <servlet-class>com.nguyenmp.cs263_real.servlet.ExampleSelfBlobstore</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>example</servlet-name>
-        <url-pattern>/example</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>persist_task</servlet-name>
         <servlet-class>com.nguyenmp.cs263_real.servlet.PersistTask</servlet-class>
     </servlet>
