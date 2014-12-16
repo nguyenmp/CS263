@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class UsersApiServlet extends HttpServlet {
+public class ComputersApiServlet extends HttpServlet {
 
-    /** returns the json representation of users on our system */
+    /** Returns the json representation of the computers on our server */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().write(new Gson().toJson(UsageDao.getUsersCached()));
+        response.getWriter().print(new Gson().toJson(UsageDao.getComputersCached()));
     }
 }

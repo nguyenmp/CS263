@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class UserApiServlet extends HttpServlet {
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    /** creates a new user with the given name defaulting to the current time, remote, and hostname = test */
+    @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("name");
         if (username == null || username.isEmpty()) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter \"username\" was not specified or was empty.");
@@ -24,11 +24,11 @@ public class UserApiServlet extends HttpServlet {
             model.isRemote = true;
             model.username = username;
             UsageModel[] result = UsageDao.put(model);
-            resp.getWriter().print(new Gson().toJson(result));
+            resp.getWriter().print(new Gson().toJson(result[0]));
         }
-
     }
 
+    /** gets the usage data for the given users */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("name");
         if (username == null || username.isEmpty()) {

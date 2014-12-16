@@ -67,6 +67,14 @@
         <servlet-name>computers</servlet-name>
         <url-pattern>/computers</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>computers_api</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.ComputersApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>computers_api</servlet-name>
+        <url-pattern>/api/computers</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>computer</servlet-name>
@@ -75,6 +83,14 @@
     <servlet-mapping>
         <servlet-name>computer</servlet-name>
         <url-pattern>/computer</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>computer_api</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.ComputerApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>computer_api</servlet-name>
+        <url-pattern>/api/computer</url-pattern>
     </servlet-mapping>
 
     <servlet>
