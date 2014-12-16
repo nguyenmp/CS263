@@ -1,7 +1,6 @@
 package com.nguyenmp.cs263_real.servlet;
 
 import com.nguyenmp.cs263_real.dao.UsageDao;
-import com.nguyenmp.cs263_real.model.UsageModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

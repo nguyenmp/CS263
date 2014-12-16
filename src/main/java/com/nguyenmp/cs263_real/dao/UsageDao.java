@@ -11,9 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-import static com.google.appengine.api.datastore.Query.FilterOperator.GREATER_THAN_OR_EQUAL;
-import static com.google.appengine.api.datastore.Query.FilterOperator.LESS_THAN_OR_EQUAL;
+import static com.google.appengine.api.datastore.Query.FilterOperator.*;
 import static com.google.appengine.api.datastore.Query.FilterPredicate;
 import static com.nguyenmp.cs263_real.servlet.DatastoreToBlobstoreConverter.Interval;
 
@@ -334,7 +332,7 @@ public class UsageDao {
      * @param usages this function mutates this parameter by filling in the timestamp and id field
      * @return the same usage models with populated timestamps and id fields
      */
-    @Nullable public static UsageModel[] put(@Nullable UsageModel[] usages) {
+    @Nullable public static UsageModel[] put(@Nullable UsageModel... usages) {
         if (usages == null) return null;
 
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();

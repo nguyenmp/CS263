@@ -33,6 +33,14 @@
         <servlet-name>users</servlet-name>
         <url-pattern>/users</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>users_api</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.UsersApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>users_api</servlet-name>
+        <url-pattern>/api/users</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>user</servlet-name>
@@ -41,6 +49,14 @@
     <servlet-mapping>
         <servlet-name>user</servlet-name>
         <url-pattern>/user</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>user_api</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.UserApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>user_api</servlet-name>
+        <url-pattern>/api/user</url-pattern>
     </servlet-mapping>
 
     <servlet>

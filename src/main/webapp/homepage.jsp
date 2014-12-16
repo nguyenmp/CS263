@@ -1,12 +1,12 @@
-<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
-<%@ page import="java.net.URLEncoder" %>
 <%@ page import="com.nguyenmp.cs263_real.dao.UsageDao" %>
 <%@ page import="com.nguyenmp.cs263_real.model.UsageModel" %>
-<%@ page import="java.util.Set" %>
 <%@ page import="com.nguyenmp.cs263_real.servlet.Homepage" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.util.HashSet" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Set" %>
 <%
     String[] usernames = UsageDao.getUsersCached();
     String[] hostnames = UsageDao.getComputersCached();

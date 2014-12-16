@@ -33,23 +33,13 @@
 
     // Create a Timeline
     var timeline = new vis.Timeline(container, dataset, options);
-//    timeline.on('rangechange', function(properties) {
-//        if (oldest_time > properties.start.valueOf()) {
-//            while (oldest_time > properties.start.valueOf()) {
-//                oldest_time -= 24 * 60 * 60 * 1000;
-//
-//                $.getJSON("http://astral-casing-728.appspot.com/blobstore_server?hostname=" + hostname + "&date=" + oldest_time, loadedDate(data));
-//            }
-//            oldest_time = properties.start.valueOf();
-//        }
-//    });
     timeline.on('select', function(properties) {
         var hostname = dataArr[properties.items[0] - 1].content;
         window.open("http://astral-casing-728.appspot.com/computer?hostname=" + hostname, "_self")
     });
 
-    var json = '<%=new Gson().toJson(DatastoreToBlobstoreConverter.convertToIntervalsByComputer(usages))%>';
-    var data = JSON.parse(json);
+    var jsonString = '<%=new Gson().toJson(DatastoreToBlobstoreConverter.convertToIntervalsByComputer(usages))%>';
+    var data = JSON.parse(jsonString);
     loadedDate(data);
     function loadedDate(data) {
 
