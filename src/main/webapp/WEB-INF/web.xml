@@ -26,14 +26,6 @@
 
     <!--  Everything below this point is for the real class  -->
     <servlet>
-        <servlet-name>homepage</servlet-name>
-        <servlet-class>com.nguyenmp.cs263_real.servlet.Homepage</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>homepage</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>users</servlet-name>
         <servlet-class>com.nguyenmp.cs263_real.servlet.UsersServlet</servlet-class>
     </servlet>
@@ -48,7 +40,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>user</servlet-name>
-        <url-pattern>/user/*</url-pattern>
+        <url-pattern>/user</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -66,7 +58,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>computer</servlet-name>
-        <url-pattern>/computer/*</url-pattern>
+        <url-pattern>/computer</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -142,4 +134,8 @@
         <servlet-name>update_cache</servlet-name>
         <url-pattern>/update_cache</url-pattern>
     </servlet-mapping>
+    
+    <welcome-file-list>
+        <welcome-file>homepage.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>

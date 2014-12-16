@@ -1,8 +1,9 @@
 <%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 <%@ page import="java.net.URLEncoder" %>
+<%@ page import="com.nguyenmp.cs263_real.dao.UsageDao" %>
 <%
-    String[] usernames = (String[]) request.getAttribute("usernames");
-    String[] hostnames = (String[]) request.getAttribute("hostnames");
+    String[] usernames = UsageDao.getUsersCached();
+    String[] hostnames = UsageDao.getComputersCached();
 %>
 
 <!doctype html>
