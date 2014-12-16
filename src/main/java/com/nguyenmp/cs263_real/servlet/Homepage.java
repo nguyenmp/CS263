@@ -11,13 +11,13 @@ import java.io.IOException;
 /**
  * Forwards to the homepage.
  */
-public class Index extends HttpServlet {
+public class Homepage extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] usernames = UsageDao.getUsersCached();
         String[] hostnames = UsageDao.getComputersCached();
 
         request.setAttribute("usernames", usernames);
         request.setAttribute("hostnames", hostnames);
-        request.getRequestDispatcher("/index2.jsp").forward(request, response);
+        request.getRequestDispatcher("/homepage.jsp").forward(request, response);
     }
 }

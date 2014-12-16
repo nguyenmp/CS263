@@ -26,11 +26,11 @@
 
     <!--  Everything below this point is for the real class  -->
     <servlet>
-        <servlet-name>index</servlet-name>
-        <servlet-class>com.nguyenmp.cs263_real.servlet.Index</servlet-class>
+        <servlet-name>homepage</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.Homepage</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>index</servlet-name>
+        <servlet-name>homepage</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet>

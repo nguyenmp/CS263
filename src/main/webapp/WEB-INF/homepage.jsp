@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="two-column" >
-    <h1>Users:</h1>
+    <h1><a href="${pageContext.request.contextPath}/users">Users:</a></h1>
     <ul>
         <% for (String username : usernames) { %>
             <li>
@@ -26,7 +26,7 @@
     </ul>
 </div>
 <div class="two-column" >
-    <h1>Computers:</h1>
+    <h1><a href="${pageContext.request.contextPath}/computers">Computers:</a></h1>
     <ul>
         <% for (String hostname : hostnames) { %>
         <li>
