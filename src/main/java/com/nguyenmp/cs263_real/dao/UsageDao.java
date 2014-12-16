@@ -195,6 +195,10 @@ public class UsageDao {
         return map;
     }
 
+    /**
+     * <p>Queries the datastore for all checkins within the last 15 minutes.</p>
+     * @return all data entries for the last 15 minutes
+     */
     @Nonnull private static UsageModel[] getRecent() {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.setTime(new Date());
@@ -217,9 +221,8 @@ public class UsageDao {
 
     /**
      * <p>Queries the memcache and falls back to the datastore
-     * for all checkins from the given computer.</p>
-     * @param hostname the hostname ("linus.cs.ucsb.edu") of the computer
-     * @return all data entries belonging to that user ordered in ascending order by timestamp
+     * for all checkins within the last 15 minutes. cached for 5 minutes</p>
+     * @return all data entries for the last 15 minutes
      */
     @Nonnull public static UsageModel[] getRecentCached() {
         MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
