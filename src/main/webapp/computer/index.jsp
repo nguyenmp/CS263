@@ -47,7 +47,7 @@
     });
     timeline.on('select', function(properties) {
         var name = dataArr[properties.items[0] - 1].content;
-        window.open("http://astral-casing-728.appspot.com/user?name=" + name, "_blank")
+        window.open("http://astral-casing-728.appspot.com/user?name=" + name, "_self")
     });
 
     var json = '<%=new Gson().toJson(usages)%>';
