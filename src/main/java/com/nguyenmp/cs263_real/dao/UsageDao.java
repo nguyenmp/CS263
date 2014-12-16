@@ -227,7 +227,7 @@ public class UsageDao {
         UsageModel[] recentData = (UsageModel[]) memcacheService.get(key);
         if (recentData == null) {
             recentData = getRecent();
-            memcacheService.put(key, recentData, Expiration.byDeltaSeconds(60*5)); // 15 minutes
+            memcacheService.put(key, recentData, Expiration.byDeltaSeconds(60*5)); // 5 minutes
         }
 
         return recentData;

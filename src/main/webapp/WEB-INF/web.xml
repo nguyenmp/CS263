@@ -41,6 +41,14 @@
         <servlet-name>users_api</servlet-name>
         <url-pattern>/api/users</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>recent_users_api</servlet-name>
+        <servlet-class>com.nguyenmp.cs263_real.servlet.RecentUsersApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>recent_users_api</servlet-name>
+        <url-pattern>/api/recent_users</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>user</servlet-name>
