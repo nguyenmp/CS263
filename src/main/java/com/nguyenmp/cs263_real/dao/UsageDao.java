@@ -162,7 +162,7 @@ public class UsageDao {
      * @param hostname the hostname ("linus.cs.ucsb.edu") of the computer
      * @return all data entries belonging to that computer ordered in ascending order by timestamp
      */
-    @Nonnull private static UsageModel[] getByComputer(String hostname) throws UnsupportedOperationException {
+    @Nonnull private static UsageModel[] getByComputer(String hostname) {
         Query query = new Query(KIND)
                 .addSort(KEY_TIMESTAMP)
                 .setFilter(new FilterPredicate(KEY_HOSTNAME, EQUAL, hostname));
@@ -195,6 +195,44 @@ public class UsageDao {
         }
 
         return map;
+    }
+
+    @Nonnull private static UsageModel[] getRecent() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MINUTE, -15);
+        long threshold = calendar.getTimeInMillis();
+
+        Query query = new Query(KIND)
+                .setFilter(new FilterPredicate(KEY_TIMESTAMP, GREATER_THAN_OR_EQUAL, threshold));
+
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Iterator<Entity> entityIterator = datastoreService.prepare(query).asIterator();
+
+        List<UsageModel> usage = new ArrayList<>();
+        while (entityIterator.hasNext()) {
+            usage.add(fromEntity(entityIterator.next()));
+        }
+
+        return usage.toArray(new UsageModel[usage.size()]);
+    }
+
+    /**
+     * <p>Queries the memcache and falls back to the datastore
+     * for all checkins from the given computer.</p>
+     * @param hostname the hostname ("linus.cs.ucsb.edu") of the computer
+     * @return all data entries belonging to that user ordered in ascending order by timestamp
+     */
+    @Nonnull public static UsageModel[] getRecentCached() {
+        MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+        String key = "recent_";
+        UsageModel[] recentData = (UsageModel[]) memcacheService.get(key);
+        if (recentData == null) {
+            recentData = getRecent();
+            memcacheService.put(key, recentData, Expiration.byDeltaSeconds(60*15)); // 15 minutes
+        }
+
+        return recentData;
     }
 
     /**
