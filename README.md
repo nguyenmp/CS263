@@ -50,6 +50,12 @@ Performance Evaluation
 Demonstrating App Execution
 -------------------
 
+--------
+Monitors
+--------
+
+This application is powered by monitors that run on the CSIL machines and scrape who are on the machines and post that data to this server. https://github.com/nguyenmp/monitor
+
 -------
 Testing
 -------
