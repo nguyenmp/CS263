@@ -8,7 +8,7 @@ Selenium
 
 Selenium is the tool I used to run automated UI/UX tests for the browser.
 
-The test file can be found in [[selTest]]
+The test file can be found in [selTest](selTest)
 
 ---------------------
 Jetpacks with PostMan
