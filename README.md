@@ -56,4 +56,4 @@ Demonstrating App Execution
 Testing
 -------
 
-Please see [Testing.md](Testing.md).
+Please see [TESTING.md](TESTING.md).
