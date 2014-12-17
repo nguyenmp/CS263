@@ -1,11 +1,12 @@
 <%@ page import="com.google.gson.Gson" %>
 <%@ page import="com.nguyenmp.cs263_real.model.UsageModel" %>
 <%@ page import="com.nguyenmp.cs263_real.servlet.DatastoreToBlobstoreConverter" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
-//    String hostname = (String) request.getAttribute("hostname");
+    String username = (String) request.getAttribute("username");
     UsageModel[] usages = (UsageModel[]) request.getAttribute("byUser");
 %>
 
@@ -15,9 +16,11 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
     <script src="http://visjs.org/dist/vis.js"></script>
+    <link rel="stylesheet" href="/stylesheets/main.css">
 </head>
 <body>
 
+<h1 id="username"><%=StringEscapeUtils.escapeHtml(username)%></h1>
 <div id="mytimeline"></div>
 
 <script type="text/javascript">

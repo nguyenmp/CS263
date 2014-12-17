@@ -29,7 +29,7 @@
 <body>
 <div class="two-column" >
     <h1><a href="${pageContext.request.contextPath}/users">Users:</a></h1>
-    <ul>
+    <ul id="users">
         <% for (String username : usernames) { %>
             <li>
                 <a href="${pageContext.request.contextPath}/user?name=<%= URLEncoder.encode(username) %>" class="username">
@@ -41,7 +41,7 @@
 </div>
 <div class="two-column" >
     <h1><a href="${pageContext.request.contextPath}/computers">Computers:</a></h1>
-    <ul>
+    <ul id="computers">
         <% for (String hostname : hostnames) { %>
         <li>
             <a href="${pageContext.request.contextPath}/computer?hostname=<%= URLEncoder.encode(hostname) %>" class="hostname">

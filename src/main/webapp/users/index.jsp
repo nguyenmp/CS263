@@ -10,9 +10,10 @@
 <html>
 <head>
     <title>Users Who Have Logged Into CSIL</title>
+    <link rel="stylesheet" href="/stylesheets/main.css">
 </head>
 <body>
-<ul>
+<ul id="users">
     <% for (String user : users) { %>
         <li>
             <div>

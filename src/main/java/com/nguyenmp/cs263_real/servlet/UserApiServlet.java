@@ -20,7 +20,7 @@ public class UserApiServlet extends HttpServlet {
         } else {
             UsageModel model = new UsageModel();
             model.timestamp = System.currentTimeMillis();
-            model.hostname = "test";
+            model.hostname = "test.cs.ucsb.edu";
             model.isRemote = true;
             model.username = username;
             UsageModel[] result = UsageDao.put(model);

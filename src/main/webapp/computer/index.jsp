@@ -2,6 +2,7 @@
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="static com.nguyenmp.cs263_real.servlet.DatastoreToBlobstoreConverter.Interval" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -16,9 +17,11 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
     <script src="http://visjs.org/dist/vis.js"></script>
+    <link rel="stylesheet" href="/stylesheets/main.css">
 </head>
 <body>
 
+<h1 id="hostname"><%= StringEscapeUtils.escapeHtml(hostname) %></h1>
 <div id="mytimeline"></div>
 
 <script type="text/javascript">
