@@ -1,5 +1,3 @@
-README
-
 -------------------
 Overview of Project
 -------------------
@@ -57,3 +55,9 @@ Testing
 -------
 
 Please see [TESTING.md](TESTING.md).
+
+-------------
+Documentation
+-------------
+
+Please see the [JavaDocs](http://nguyenmp.com/apidocs/).
